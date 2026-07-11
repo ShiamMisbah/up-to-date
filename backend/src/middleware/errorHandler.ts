@@ -7,7 +7,6 @@ export const errorHandler = (
     next: NextFunction
 ) => {
     console.error(err);
-    console.log("ashche")
 
     res.status(err.status || 500).json({
         success: false,

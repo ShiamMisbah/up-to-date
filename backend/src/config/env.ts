@@ -6,4 +6,5 @@ export const env = {
   port: process.env.PORT || 5000,
   mongoUri: process.env.MONGODB_URI || "",
   nodeEnv: process.env.NODE_ENV || "development",
+  jwtKey: process.env.JWT_KEY || "secret_key"
 };

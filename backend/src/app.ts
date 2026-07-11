@@ -5,10 +5,12 @@ import morgan from "morgan";
 
 import routes from "./routes";
 import { errorHandler } from "./middleware/errorHandler";
+import cookieParser from "cookie-parser";
 // import { notFound } from "./middleware/notFound";
 
 const app = express();
 
+app.use(cookieParser())
 app.use(cors());
 app.use(helmet());
 app.use(morgan("dev"));
