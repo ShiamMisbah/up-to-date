@@ -56,7 +56,7 @@ const SignupForm = (props: Props) => {
               <Field data-invalid={fieldState.invalid}>
                 <FieldLabel
                   htmlFor="login-form-firstName"
-                  className="text-[16px] mb-2 justify-center"
+                  className="text-[16px] mb-2 justify-center lg:justify-start"
                 >
                   First Name
                 </FieldLabel>
@@ -85,7 +85,7 @@ const SignupForm = (props: Props) => {
               <Field data-invalid={fieldState.invalid}>
                 <FieldLabel
                   htmlFor="login-form-lastName"
-                  className="text-[16px] mb-2 justify-center"
+                  className="text-[16px] mb-2 justify-center lg:justify-start"
                 >
                   First Name
                 </FieldLabel>
@@ -114,7 +114,7 @@ const SignupForm = (props: Props) => {
               <Field data-invalid={fieldState.invalid}>
                 <FieldLabel
                   htmlFor="login-form-enail"
-                  className="text-[16px] mb-2 justify-center"
+                  className="text-[16px] mb-2 justify-center lg:justify-start"
                 >
                   Email
                 </FieldLabel>
@@ -143,7 +143,7 @@ const SignupForm = (props: Props) => {
               <Field data-invalid={fieldState.invalid}>
                 <FieldLabel
                   htmlFor="login-form-password"
-                  className="text-[16px] mb-2 justify-center"
+                  className="text-[16px] mb-2 justify-center lg:justify-start"
                 >
                   Password
                 </FieldLabel>
@@ -184,7 +184,7 @@ const SignupForm = (props: Props) => {
               <Field data-invalid={fieldState.invalid}>
                 <FieldLabel
                   htmlFor="login-form-confirmPassword"
-                  className="text-[16px] mb-2 justify-center"
+                  className="text-[16px] mb-2 justify-center lg:justify-start"
                 >
                   Confirm Password
                 </FieldLabel>

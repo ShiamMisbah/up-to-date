@@ -7,12 +7,14 @@ import { useLogin } from '@/hooks/use-login'
 import { loginSchema, LoginSchema } from '@/schema/auth.schema'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Eye, EyeOff } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 
 type Props = {}
 
 const LoginForm = (props: Props) => {
+    const router = useRouter()
     const { error, handleLogin, loading } = useLogin();
 
     const [showPassword, setShowPassword] = useState(false);
@@ -28,11 +30,11 @@ const LoginForm = (props: Props) => {
     const onSubmit = async (data: LoginSchema) => {
       try {
         const res = await handleLogin(data);
-        console.log(res);
+        localStorage.setItem("userData", JSON.stringify(res))
+        router.push("/feed");
       } catch (error) {
         console.log(error)
       }
-      
     }
 
   return (
@@ -46,7 +48,7 @@ const LoginForm = (props: Props) => {
               <Field data-invalid={fieldState.invalid}>
                 <FieldLabel
                   htmlFor="login-form-enail"
-                  className="text-[16px] mb-2 justify-center"
+                  className="text-[16px] mb-2 justify-center lg:justify-start"
                 >
                   Email
                 </FieldLabel>
@@ -75,7 +77,7 @@ const LoginForm = (props: Props) => {
               <Field data-invalid={fieldState.invalid}>
                 <FieldLabel
                   htmlFor="login-form-password"
-                  className="text-[16px] mb-2 justify-center"
+                  className="text-[16px] mb-2 justify-center lg:justify-start"
                 >
                   Password
                 </FieldLabel>

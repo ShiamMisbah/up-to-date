@@ -1,0 +1,37 @@
+import { LoginResponse } from "@/app/services/auth.services";
+import { createPost } from "@/app/services/post.service";
+import { createPostSchema } from "@/schema/post.schema";
+import { useState } from "react";
+
+export const useCreatePost = () => {
+        const [loading, setLoading] = useState(false);
+        const [error, setError] = useState("");
+
+        const handleCreatePost = async (data:createPostSchema) => {
+            const userData: LoginResponse = JSON.parse(localStorage.getItem("userData")!);
+            setLoading(true);
+            setError("");
+
+            try {
+              const response = await createPost({
+                ...data,
+                userId: userData.id,
+                userName: userData.firstName,
+              });
+              return response;
+            } catch (error) {
+              if (error instanceof Error) {
+                setError(error.message);
+              }
+
+              throw error;
+            } finally {
+              setLoading(false);
+            }
+        }
+        return {
+          loading,
+          error,
+          handleCreatePost,
+        };
+}

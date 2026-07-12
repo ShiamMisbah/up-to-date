@@ -100,14 +100,10 @@ export const loginUser = async (req: Request, res: Response, next: NextFunction)
     generateAccessToken(user.id, user.email, res);
 
     res.status(200).json({
-      success: true,
-      message: "Logged in successfully",
-      data: {
-        id: user.id,
-        email: user.email,
-        firstName: user.firstName,
-        lastName: user.lastName,
-      },
+      id: user.id,
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
     });
 
   } catch (error) {

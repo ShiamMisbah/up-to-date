@@ -10,10 +10,10 @@ type Props = {}
 const page = (props: Props) => {
   return (
     <div className="container flex flex-col lg:flex-row lg:justify-center lg:gap-10 items-center justify-center bg-mainBg m-auto py-12.5">
-      <div className="lg:flex-2 lg:max-w-[45%]">
+      <div className="lg:flex-2 lg:max-w-[70%]">
         <Image
-          src="/images/login.png"
-          alt="Login"
+          src="/images/registration.png"
+          alt="Signup"
           width={1269}
           height={1240}
           className="w-full"
