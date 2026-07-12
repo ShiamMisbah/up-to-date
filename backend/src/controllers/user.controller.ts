@@ -91,11 +91,11 @@ export const loginUser = async (req: Request, res: Response, next: NextFunction)
       });
     }
 
-    generateAccessToken(user.email, res);
+    generateAccessToken(user.id, user.email, res);
 
     res.status(200).json({
       success: true,
-      message: {email: user.email, firstName: user.firstName, lastName: user.lastName},
+      message: {id: user.id ,email: user.email, firstName: user.firstName, lastName: user.lastName},
     })
 
   } catch (error) {
