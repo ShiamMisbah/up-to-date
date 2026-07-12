@@ -42,7 +42,13 @@ export const signupUser = async (req: Request, res: Response, next: NextFunction
       await newUser.save()
       return res.status(200).json({
         success: true,
-        message: {email, firstName, lastName},
+        message: "Signup Complete",
+        data: {
+          id: newUser.id,
+          email: newUser.email,
+          firstName: newUser.firstName,
+          lastName: newUser.lastName,
+        },
       });
     }
 
@@ -95,8 +101,14 @@ export const loginUser = async (req: Request, res: Response, next: NextFunction)
 
     res.status(200).json({
       success: true,
-      message: {id: user.id ,email: user.email, firstName: user.firstName, lastName: user.lastName},
-    })
+      message: "Logged in successfully",
+      data: {
+        id: user.id,
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+      },
+    });
 
   } catch (error) {
     next(error);
