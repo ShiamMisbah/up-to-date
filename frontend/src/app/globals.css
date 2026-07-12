@@ -9,6 +9,7 @@
   --textColor: #2d3748;
   --mainTextColor: #212529;
   --textGray: #767676;
+  --textGrayFade: #7676761f;
   --fadeSkyBlue: #1890ff0d;
 
   --background: #f2f2f2;
@@ -51,6 +52,7 @@
   --color-textColor: var(--textColor);
   --color-mainTextColor: var(--mainTextColor);
   --color-textGray: var(--textGray);
+  --color-textGrayFade: var(--textGrayFade);
   --color-fadeSkyBlue: var(--fadeSkyBlue);
   --font-sans: var(--font-sans);
   --font-mono: var(--font-poppins);

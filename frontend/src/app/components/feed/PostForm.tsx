@@ -22,7 +22,7 @@ import { Controller, useForm } from "react-hook-form";
 type Props = {};
 
 const PostForm = (props: Props) => {
-    const {error, handleCreatePost, loading} = useCreatePost()
+  const {error, handleCreatePost, loading} = useCreatePost()
 
   const form = useForm<createPostSchema>({
     resolver: zodResolver(createPostSchema),
@@ -59,7 +59,7 @@ const PostForm = (props: Props) => {
                 />
                 {fieldState.invalid && (
                   <FieldError
-                    className="text-left"
+                    className="text-left text-xs"
                     errors={[fieldState.error]}
                   />
                 )}
@@ -69,12 +69,12 @@ const PostForm = (props: Props) => {
           <div className="flex justify-between items-center bg-fadeSkyBlue rounded-sm p-2 gap-15">
             <div className="flex justify-evenly flex-3 pl-2">
               <Button className="bg-transparent text-textGray hover:text-primary hover:bg-transparent flex gap-2.5 items-center">
-                <Image />
-                Photo
+                <Image className="size-6" />
+                <span className="hidden md:block">Photo</span>
               </Button>
               <Button className="bg-transparent text-textGray hover:text-primary hover:bg-transparent flex gap-2.5 items-center">
-                <Video />
-                Video
+                <Video className="size-6" />
+                <span className="hidden md:block">Video</span>
               </Button>
               <Controller
                 name="privacyStatus"
@@ -86,8 +86,8 @@ const PostForm = (props: Props) => {
                         type="button"
                         className="bg-transparent text-textGray hover:text-primary hover:bg-transparent flex gap-2.5 items-center"
                       >
-                        <Settings />
-                        {field.value}
+                        <Settings className="size-6" />
+                        <span className="hidden md:block">{field.value}</span>
                       </Button>
                     </DropdownMenuTrigger>
 
@@ -109,9 +109,15 @@ const PostForm = (props: Props) => {
               />
             </div>
 
-            <Button type="submit" className="w-auto h-auto px-5.5 py-3 text-[16px] rounded-sm gap-3 flex-1">
-              <Send />
-              Post
+            <Button
+              type="submit"
+              className="w-auto h-auto px-5.5 py-3 text-[16px] rounded-sm gap-3 flex-1"
+              disabled={loading}
+            >
+              <Send className="size-6" />
+              <span className="hidden md:block">
+                {loading ? "Posting" : "Post"}
+              </span>
             </Button>
           </div>
         </FieldGroup>

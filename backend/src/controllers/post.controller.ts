@@ -7,6 +7,8 @@ export const getAllPosts = async (
   res: Response,
   next: NextFunction,
 ) => {
+  const page = Number(req.query.page) || 1;
+  const limit = Number(req.query.limit) || 10;
   try {
     const allPosts = await Post.find(
       { postType: "post" },
@@ -14,17 +16,23 @@ export const getAllPosts = async (
     )
       .populate("reactionList", "userName reaction")
       .populate("commentList", "userName mainText")
-      .sort({ createdAt: -1 });
+      .sort({ createdAt: -1 })
+      .skip((page - 1) * limit)
+      .limit(limit);
     if (allPosts.length === 0) {
       return res.status(200).json({
         success: true,
         message: "No posts found",
       });
     }
+    const total = await Post.countDocuments();
     return res.status(200).json({
       success: true,
       message: "Posts Found",
-      data: allPosts,
+      posts: allPosts,
+      page,
+      totalPages: Math.ceil(total / limit),
+      total
     });
   } catch (error) {
     next(error);
