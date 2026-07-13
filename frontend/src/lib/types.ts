@@ -38,6 +38,6 @@ export interface Post {
   createdAt: string;
   updatedAt: string;
 
-  image?: Buffer;
+  image?: string;
   imageType?: string;
 }
