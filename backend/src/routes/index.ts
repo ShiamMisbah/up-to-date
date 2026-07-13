@@ -7,7 +7,7 @@ import { authenticate } from "../middleware/authenticate";
 const router = Router();
 
 router.use("/user", userRoutes)
-router.use("/content", authenticate, postRoutes)
-router.use("/reaction", authenticate, reactionRoutes);
+router.use("/content", postRoutes)
+router.use("/reaction", reactionRoutes);
 
 export default router;
