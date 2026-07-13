@@ -35,10 +35,10 @@ export interface getCommentsResponse {
   total: number;
 }
 
-export const createPost = (data: createPostPayloadSchema) => {
+export const createPost = (data: FormData) => {
   return fetcher<createPostresponse>("/content/", {
     method: "POST",
-    body: JSON.stringify(data),
+    body: data,
   });
 };
 

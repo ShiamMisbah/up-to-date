@@ -19,6 +19,9 @@ export interface IPost extends IContent {
   commentList: Types.ObjectId[];
   postType: PostType;
   parentId: Types.ObjectId;
+
+  image?: Buffer;
+  imageType?: string;
 }
 
 const postSchema = new Schema<IPost>(
@@ -40,17 +43,30 @@ const postSchema = new Schema<IPost>(
       enum: ["public", "private"],
       default: "public",
       required: false,
-    }, 
+    },
     //  For Comments and replies
-    parentId: { type: Types.ObjectId, ref: "Post", required: false, default: null },
+    parentId: {
+      type: Types.ObjectId,
+      ref: "Post",
+      required: false,
+      default: null,
+    },
     postType: {
-        type: String,
-        enum: ["post", "comment", "reply"],
-        default: "post",
-        required: true,
+      type: String,
+      enum: ["post", "comment", "reply"],
+      default: "post",
+      required: true,
     },
     reactionList: [{ type: Types.ObjectId, ref: "Reaction" }],
     commentList: [{ type: Types.ObjectId, ref: "Post" }],
+
+    image: {
+      type: Buffer,
+    },
+
+    imageType: {
+      type: String,
+    },
   },
   { timestamps: true },
 );

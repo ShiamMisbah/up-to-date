@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import Post, { PostType } from "../models/post.model";
+import Post, { IPost, PostType } from "../models/post.model";
 import { Types } from "mongoose";
 
 export const getAllPosts = async (
@@ -19,7 +19,17 @@ export const getAllPosts = async (
       .sort({ createdAt: -1 })
       .skip((page - 1) * limit)
       .limit(limit);
-    if (allPosts.length === 0) {
+
+    const formattedPosts = allPosts.map((post) => {
+      const obj: any = post.toObject();
+
+      if (obj.image) {
+        obj.image = `data:${obj.imageType};base64,${obj.image.toString("base64")}`;
+      }
+
+      return obj;
+    });
+    if (formattedPosts.length === 0) {
       return res.status(200).json({
         success: true,
         message: "No posts found",
@@ -29,10 +39,10 @@ export const getAllPosts = async (
     return res.status(200).json({
       success: true,
       message: "Posts Found",
-      posts: allPosts,
+      posts: formattedPosts,
       page,
       totalPages: Math.ceil(total / limit),
-      total
+      total,
     });
   } catch (error) {
     next(error);
@@ -45,14 +55,23 @@ export const createPost = async (
   next: NextFunction,
 ) => {
   const { id, mainText, userId, userName, privacyStatus, parentId } = req.body;
+  const file = req.file;
+
   // Check if Post  already exists for the same Id
   const existingPost = await Post.findById(id);
   try {
     if (existingPost) {
-      await existingPost.updateOne(
-        { mainText, privacyStatus },
-        { runValidators: true },
-      );
+      const updatedData: any = {
+        mainText,
+        privacyStatus,
+      };
+
+      if (file) {
+        updatedData.image = file.buffer;
+        updatedData.imageType = file.mimetype;
+      }
+
+      await existingPost.updateOne(updatedData, { runValidators: true });
       return res.status(201).json({
         success: true,
         message: "Post updated successfully",
@@ -65,6 +84,8 @@ export const createPost = async (
       privacyStatus,
       parentId: parentId || null,
       postType: "post",
+      image: file?.buffer,
+      imageType: file?.mimetype,
     });
     await newPost.save();
     res.status(201).json({

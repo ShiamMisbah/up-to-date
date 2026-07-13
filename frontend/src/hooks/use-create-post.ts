@@ -7,17 +7,16 @@ export const useCreatePost = () => {
         const [loading, setLoading] = useState(false);
         const [error, setError] = useState("");
 
-        const handleCreatePost = async (data:createPostSchema) => {
+        const handleCreatePost = async (formData: FormData) => {
             const userData: LoginResponse = JSON.parse(localStorage.getItem("userData")!);
             setLoading(true);
             setError("");
 
             try {
-              const response = await createPost({
-                ...data,
-                userId: userData.id,
-                userName: userData.firstName,
-              });
+              formData.append("userId", userData.id);
+              formData.append("userName", userData.firstName);
+
+              const response = await createPost(formData);
               return response;
             } catch (error) {
               if (error instanceof Error) {

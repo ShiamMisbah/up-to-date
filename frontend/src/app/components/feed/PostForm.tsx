@@ -16,13 +16,24 @@ import { PrivacyStatus } from "@/lib/types";
 import { createPostSchema } from "@/schema/post.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Camera, Image, Send, Settings, Video } from "lucide-react";
-import React from "react";
+import React, { useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 
 type Props = {};
 
 const PostForm = (props: Props) => {
   const {error, handleCreatePost, loading} = useCreatePost()
+
+  const imageInputRef = useRef<HTMLInputElement>(null)
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+
+    if (!file) return;
+
+    setSelectedImage(file);
+  };
 
   const form = useForm<createPostSchema>({
     resolver: zodResolver(createPostSchema),
@@ -33,11 +44,24 @@ const PostForm = (props: Props) => {
   });
 
   const onSubmit = async (data: createPostSchema) => {
+    const formData = new FormData()
+    formData.append("mainText", data.mainText)
+    formData.append("privacyStatus", data.privacyStatus);
+
+    if (selectedImage) {
+      formData.append("image", selectedImage)
+    }
+
     try {
-        const res = await handleCreatePost(data);
+        const res = await handleCreatePost(formData);
+        form.reset()
+        setSelectedImage(null)
+        if (imageInputRef.current) {
+          imageInputRef.current.value = "";
+        }
         console.log(res)
     } catch (error) {
-        
+        console.error(error);
     }
   };
 
@@ -66,9 +90,29 @@ const PostForm = (props: Props) => {
               </Field>
             )}
           />
+          {selectedImage && (
+            <img
+              src={URL.createObjectURL(selectedImage)}
+              alt="Preview"
+              className="mt-4 h-40 rounded-lg object-cover"
+            />
+          )}
           <div className="flex justify-between items-center bg-fadeSkyBlue rounded-sm p-2 gap-15">
             <div className="flex justify-evenly flex-3 pl-2">
-              <Button className="bg-transparent text-textGray hover:text-primary hover:bg-transparent flex gap-2.5 items-center">
+              <>
+                <input
+                  ref={imageInputRef}
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={handleImageChange}
+                />
+              </>
+              <Button
+                type="button"
+                onClick={() => imageInputRef.current?.click()}
+                className="bg-transparent text-textGray hover:text-primary hover:bg-transparent flex gap-2.5 items-center"
+              >
                 <Image className="size-6" />
                 <span className="hidden md:block">Photo</span>
               </Button>

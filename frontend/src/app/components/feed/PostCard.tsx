@@ -7,6 +7,7 @@ import CommentForm from './CommentForm';
 import CommentCard from './CommentCard';
 import CommentCollections from './CommentCollections';
 import ReactionComponent from './ReactionComponent';
+import Image from 'next/image';
 
 type Props = {
     post: Post
@@ -23,7 +24,6 @@ const PostCard = ({post}: Props) => {
   );
   let currentReaction: "like" | "unlike" | "" = "";
   if (myReaction) currentReaction = myReaction.reaction
-
   return (
     <div className="bg-white w-full p-6 rounded-sm flex flex-col gap-5">
       <div className="flex justify-between">
@@ -39,6 +39,13 @@ const PostCard = ({post}: Props) => {
         </Button>
       </div>
       <div className="text-sm">{post.mainText}</div>
+      {post.image && (
+        <img
+          src={post.image}
+          alt="Post"
+          className="mt-4 w-full rounded-lg object-cover"
+        />
+      )}
       <div className="flex gap-5 text-xs justify-end items-center">
         <div>
           {post.commentList.length}{" "}

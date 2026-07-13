@@ -37,4 +37,7 @@ export interface Post {
   commentList: Comment[];
   createdAt: string;
   updatedAt: string;
+
+  image?: Buffer;
+  imageType?: string;
 }
