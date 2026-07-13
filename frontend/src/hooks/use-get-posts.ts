@@ -9,12 +9,14 @@ export const useGetPosts = () => {
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [hasMore, setHasMore] = useState(false);
 
   const handleGetPost = async () => {
     setLoading(true);
     setError("");
     try {
       const res = await getPost(page);
+      if (res.pagination.hasMore) setHasMore(res.pagination.hasMore);
       if (page === 1) {
         setPosts(res.posts);
       } else {
@@ -35,5 +37,5 @@ export const useGetPosts = () => {
     handleGetPost()
   }, [page])
 
-  return {posts, loading, error, setPage}
+  return {posts, hasMore, loading, error, setPage}
 };

@@ -35,14 +35,17 @@ export const getAllPosts = async (
         message: "No posts found",
       });
     }
-    const total = await Post.countDocuments();
+    const total = await Post.countDocuments({ postType: "post" });
     return res.status(200).json({
       success: true,
       message: "Posts Found",
       posts: formattedPosts,
-      page,
-      totalPages: Math.ceil(total / limit),
-      total,
+      pagination: {
+        page,
+        limit,
+        total,
+        hasMore: page * limit < total,
+      },
     });
   } catch (error) {
     next(error);
@@ -149,22 +152,34 @@ export const getAllComments = async (
       .sort({ createdAt: -1 })
       .skip((page - 1) * limit)
       .limit(limit);
+    const total = await Post.countDocuments({
+      postType: "comment",
+      parentId: dynamicParentId,
+    });
 
     if (allComments.length === 0) {
       return res.status(200).json({
         success: true,
         message: "No Comments found",
+        pagination: {
+          page,
+          limit,
+          total,
+          hasMore: page * limit < total,
+        },
       });
     }
 
-    const total = await Post.countDocuments();
     return res.status(200).json({
       success: true,
       message: "Comments Found",
       comments: allComments,
-      page,
-      totalPages: Math.ceil(total / limit),
-      total,
+      pagination: {
+        page,
+        limit,
+        total,
+        hasMore: page * limit < total,
+      },
     });
   } catch (error) {
     next(error);

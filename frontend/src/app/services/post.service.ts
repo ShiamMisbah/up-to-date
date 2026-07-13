@@ -22,17 +22,27 @@ export interface createCommentPayloadSchema {
 }
 
 export interface getPostsResponse {
+  success: boolean;
+  message: string;
   posts: Post[];
-  page: number;
-  totalPages: number;
-  total: number;
+  pagination: {
+    page: number;
+    limit: number;
+    total: number;
+    hasMore: boolean;
+  };
 }
 
 export interface getCommentsResponse {
+  success: boolean;
+  message: string;
   comments: Post[];
-  page: number;
-  totalPages: number;
-  total: number;
+  pagination: {
+    page: number;
+    limit: number;
+    total: number;
+    hasMore: boolean;
+  };
 }
 
 export const createPost = (data: FormData) => {
@@ -42,7 +52,7 @@ export const createPost = (data: FormData) => {
   });
 };
 
-export const getPost = (page: number, limit = 20) => {
+export const getPost = (page: number, limit = 10) => {
   return fetcher<getPostsResponse>(`/content?page=${page}&limit=${limit}`);
 };
 
@@ -56,7 +66,7 @@ export const createComment = (
   });
 };
 
-export const getComment = (page: number, limit = 20, parentId: string) => {
+export const getComment = (page: number, limit = 2, parentId: string) => {
   return fetcher<getCommentsResponse>(
     `/content/comment/${parentId}?page=${page}&limit=${limit}`,
   );

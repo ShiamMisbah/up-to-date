@@ -9,12 +9,15 @@ export const useGetComments = (parentId: string) => {
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [hasMore, setHasMore] = useState(false);
 
   const handleGetComment = async (parentId: string) => {
     setLoading(true);
     setError("");
     try {
-      const res = await getComment(page, 20, parentId);
+      const res = await getComment(page, undefined, parentId);
+      console.log(res.pagination);
+      if (res.pagination) setHasMore(res.pagination.hasMore);
       if (page === 1) {
         setComments(res.comments);
       } else {
@@ -34,5 +37,5 @@ export const useGetComments = (parentId: string) => {
     handleGetComment(parentId);
   }, [page, parentId]);
 
-  return { comments, loading, error, setPage };
+  return { comments, hasMore, loading, error, setPage };
 };
