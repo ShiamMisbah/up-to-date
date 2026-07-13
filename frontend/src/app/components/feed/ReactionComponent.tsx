@@ -6,13 +6,19 @@ import React from 'react'
 
 type Props = {
     parentId: string;
+    myReact?: "like" | "unlike" | ""
 }
 
-const ReactionComponent = ({parentId}: Props) => {
+const ReactionComponent = ({parentId, myReact = ""}: Props) => {
     const  {error, handleReaction, loading} = useCreateReaction()
-
-    const handleSubmit = (reaction: ReactionType) => {
-        handleReaction(reaction, parentId)
+    const handleSubmit = async (reaction: ReactionType) => {
+        try {
+            const res = await handleReaction(reaction, parentId);
+            console.log(res)
+        } catch (error) {
+            
+        }
+        
     }
   return (
     <div className="flex">
@@ -21,7 +27,7 @@ const ReactionComponent = ({parentId}: Props) => {
         disabled={loading}
         className="bg-transparent text-textGray hover:text-primary hover:bg-transparent flex gap-2.5 items-center flex-1"
       >
-        <ThumbsUp />
+        <ThumbsUp fill={myReact === "like" ? "currentColor" : "none"} />
         <span className="hidden md:block">Like</span>
       </Button>
       <Button
@@ -29,7 +35,7 @@ const ReactionComponent = ({parentId}: Props) => {
         disabled={loading}
         className="bg-transparent text-textGray hover:text-primary hover:bg-transparent flex gap-2.5 items-center flex-1"
       >
-        <ThumbsDown />
+        <ThumbsDown fill={myReact === "unlike" ? "currentColor" : "none"} />
         <span className="hidden md:block">Disike</span>
       </Button>
     </div>

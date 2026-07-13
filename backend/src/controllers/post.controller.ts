@@ -14,8 +14,8 @@ export const getAllPosts = async (
       { postType: "post" },
       "-parentId -postType",
     )
-      .populate("reactionList", "userName reaction")
-      .populate("commentList", "userName mainText")
+      .populate("reactionList", "userId userName reaction")
+      .populate("commentList", "userId userName mainText")
       .sort({ createdAt: -1 })
       .skip((page - 1) * limit)
       .limit(limit);
@@ -123,8 +123,8 @@ export const getAllComments = async (
     }
 
     const allComments = await Post.find({ postType, parentId: dynamicParentId })
-      .populate("reactionList", "userName reaction")
-      .populate("commentList", "userName mainText")
+      .populate("reactionList", "userId userName reaction")
+      .populate("commentList", "userId userName mainText")
       .sort({ createdAt: -1 })
       .skip((page - 1) * limit)
       .limit(limit);

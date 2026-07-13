@@ -17,6 +17,12 @@ const PostCard = ({post}: Props) => {
   const handleShowComment = () => {
     setShowComments(!showComments)
   }
+  const currentUser = JSON.parse(localStorage.getItem("userData")!);
+  const myReaction = post.reactionList.find(
+    (reaction) => reaction.userId === currentUser.id,
+  );
+  let currentReaction: "like" | "unlike" | "" = "";
+  if (myReaction) currentReaction = myReaction.reaction
 
   return (
     <div className="bg-white w-full p-6 rounded-sm flex flex-col gap-5">
@@ -44,7 +50,7 @@ const PostCard = ({post}: Props) => {
         </div>
       </div>
       <div className="flex justify-between items-center bg-fadeSkyBlue rounded-sm p-2 gap-15">
-        <ReactionComponent parentId={post._id} />
+        <ReactionComponent myReact={myReaction?.reaction} parentId={post._id} />
         <Button
           onClick={handleShowComment}
           className="bg-transparent text-textGray hover:text-primary hover:bg-transparent flex gap-2.5 items-center"

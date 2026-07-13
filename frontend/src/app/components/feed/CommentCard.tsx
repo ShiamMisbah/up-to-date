@@ -17,6 +17,14 @@ const CommentCard = ({post, isReply = false}: Props) => {
   const handleShowReply = () => {
     setShowReplies(!showReplies)
   }
+
+  const currentUser = JSON.parse(localStorage.getItem("userData")!);
+  const myReaction = post.reactionList.find(
+    (reaction) => reaction.userId === currentUser.id,
+  );
+  let currentReaction: "like" | "unlike" | "" = "";
+  if (myReaction) currentReaction = myReaction.reaction;
+
   return (
     <div className="relative">
       <div className="bg-textGrayFade w-full px-3 py-5 rounded-lg flex flex-col gap-1">
@@ -41,7 +49,10 @@ const CommentCard = ({post, isReply = false}: Props) => {
       )}
       <div className="flex my-2 justify-start items-center">
         <div className="flex">
-          <ReactionComponent parentId={post._id} />
+          <ReactionComponent
+            myReact={myReaction?.reaction}
+            parentId={post._id}
+          />
           <Button
             onClick={handleShowReply}
             className="bg-transparent text-textGray hover:text-primary hover:bg-transparent flex gap-2.5 items-center flex-1"

@@ -15,8 +15,9 @@ export enum ReactionType {
 
 export interface Reaction {
   _id: string;
+  userId: string;
   userName: string;
-  reaction: string;
+  reaction: "like" | "unlike";
 }
 
 export interface Comment {
