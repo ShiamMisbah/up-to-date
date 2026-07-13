@@ -1,5 +1,5 @@
 import { LoginResponse } from "@/app/services/auth.services";
-import { createComment, createPost } from "@/app/services/post.service";
+import { createComment, createPost, createReply } from "@/app/services/post.service";
 import { createCommentSchema, createPostSchema } from "@/schema/post.schema";
 import { useState } from "react";
 
@@ -57,10 +57,45 @@ export const useCreatePost = () => {
             setLoading(false);
           }
         };
+
+        const handleCreateReply = async (
+          data: createCommentSchema,
+          parentId: string,
+          commentId: string
+        ) => {
+          const userData: LoginResponse = JSON.parse(
+            localStorage.getItem("userData")!,
+          );
+          setLoading(true);
+          setError("");
+
+          try {
+            const response = await createReply(
+              {
+                ...data,
+                userId: userData.id,
+                userName: userData.firstName,
+              },
+              parentId,
+              commentId
+            );
+            return response;
+          } catch (error) {
+            if (error instanceof Error) {
+              setError(error.message);
+            }
+
+            throw error;
+          } finally {
+            setLoading(false);
+          }
+        };
+        
         return {
           loading,
           error,
           handleCreatePost,
-          handleCreateComment
+          handleCreateComment,
+          handleCreateReply
         };
 }

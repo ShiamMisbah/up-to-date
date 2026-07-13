@@ -103,6 +103,8 @@ export const getAllComments = async (
   res: Response,
   next: NextFunction,
 ) => {
+  const page = Number(req.query.page) || 1;
+  const limit = Number(req.query.limit) || 10;
   try {
     const { parentId, replyParentId = null } = req.params;
     if (!parentId) {
@@ -123,19 +125,25 @@ export const getAllComments = async (
     const allComments = await Post.find({ postType, parentId: dynamicParentId })
       .populate("reactionList", "userName reaction")
       .populate("commentList", "userName mainText")
-      .sort({ createdAt: -1 });
+      .sort({ createdAt: -1 })
+      .skip((page - 1) * limit)
+      .limit(limit);
 
-    
     if (allComments.length === 0) {
       return res.status(200).json({
         success: true,
         message: "No Comments found",
       });
     }
+
+    const total = await Post.countDocuments();
     return res.status(200).json({
       success: true,
       message: "Comments Found",
-      data: allComments,
+      comments: allComments,
+      page,
+      totalPages: Math.ceil(total / limit),
+      total,
     });
   } catch (error) {
     next(error);

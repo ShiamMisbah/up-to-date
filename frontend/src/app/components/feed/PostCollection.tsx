@@ -12,7 +12,7 @@ const PostCollection = (props: Props) => {
 
   return <div className="w-full max-w-159 flex flex-col gap-5 pb-30">
     {posts.length > 0 ? (
-        posts.map((post) => <PostCard post={post} />)
+        posts.map((post) => <PostCard key={post._id} post={post} />)
     ) : (<div></div>)}
     
   </div>;

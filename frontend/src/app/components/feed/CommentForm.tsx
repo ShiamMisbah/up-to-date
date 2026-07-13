@@ -1,3 +1,4 @@
+import { createPostresponse } from "@/app/services/post.service";
 import { Button } from "@/components/ui/button";
 import { Field, FieldError, FieldGroup } from "@/components/ui/field";
 import { Textarea } from "@/components/ui/textarea";
@@ -10,22 +11,31 @@ import { Controller, useForm } from "react-hook-form";
 
 type Props = {
   parentId: string;
+  commentId?: string;
 };
 
-const CommentForm = ({ parentId }: Props) => {
-  const { error, handleCreateComment, loading } = useCreatePost();
+const CommentForm = ({ parentId, commentId = "" }: Props) => {
+  const { error, handleCreateComment, handleCreateReply, loading } =
+    useCreatePost();
   const form = useForm<createCommentSchema>({
     resolver: zodResolver(createCommentSchema),
     defaultValues: {
       mainText: "",
     },
   });
+  let res: createPostresponse;
+  const dynamicPlaceholder =
+    commentId !== "" ? "Reply to the comment" : "Write a comment";
 
   const onSubmit = async (data: createCommentSchema) => {
     try {
-      const res = await handleCreateComment(data, parentId);
+      if (commentId !== "") {
+        res = await handleCreateReply(data, parentId, commentId);
+      } else {
+        res = await handleCreateComment(data, parentId);
+      }
       console.log(res);
-      form.reset()
+      form.reset();
     } catch (error) {}
   };
   return (
@@ -42,7 +52,7 @@ const CommentForm = ({ parentId }: Props) => {
                     {...field}
                     id="login-form-enail"
                     aria-invalid={fieldState.invalid}
-                    placeholder="Write Comment"
+                    placeholder={dynamicPlaceholder}
                     className="px-5 min-h-8 text-xs resize-none border-0 outline-none
                     focus:outline-none
                     focus:ring-0
@@ -70,7 +80,7 @@ const CommentForm = ({ parentId }: Props) => {
             <Button
               type="submit"
               className="w-auto h-auto px-5.5 min-h-9 text-[16px] gap-3 flex-1 rounded-full"
-              disabled = {loading}
+              disabled={loading}
             >
               <Send />
             </Button>

@@ -2,15 +2,22 @@ import { Button } from '@/components/ui/button';
 import { Post } from '@/lib/types';
 import { getTimeAgo } from '@/lib/utils';
 import { EllipsisVertical, MessageCircleMore, ThumbsDown, ThumbsUp } from 'lucide-react';
-import React from 'react'
+import React, { useState } from 'react'
 import CommentForm from './CommentForm';
+import CommentCard from './CommentCard';
+import CommentCollections from './CommentCollections';
+import ReactionComponent from './ReactionComponent';
 
 type Props = {
     post: Post
 }
 
 const PostCard = ({post}: Props) => {
-    console.log(post)
+  const [showComments, setShowComments] = useState(false)
+  const handleShowComment = () => {
+    setShowComments(!showComments)
+  }
+
   return (
     <div className="bg-white w-full p-6 rounded-sm flex flex-col gap-5">
       <div className="flex justify-between">
@@ -36,16 +43,12 @@ const PostCard = ({post}: Props) => {
           <span className="text-textGray">Reactions</span>
         </div>
       </div>
-      <div className="flex justify-evenly items-center bg-fadeSkyBlue rounded-sm p-2 gap-15">
-        <Button className="bg-transparent text-textGray hover:text-primary hover:bg-transparent flex gap-2.5 items-center flex-1">
-          <ThumbsUp />
-          <span className="hidden md:block">Like</span>
-        </Button>
-        <Button className="bg-transparent text-textGray hover:text-primary hover:bg-transparent flex gap-2.5 items-center flex-1">
-          <ThumbsDown />
-          <span className="hidden md:block">Disike</span>
-        </Button>
-        <Button className="bg-transparent text-textGray hover:text-primary hover:bg-transparent flex gap-2.5 items-center flex-1">
+      <div className="flex justify-between items-center bg-fadeSkyBlue rounded-sm p-2 gap-15">
+        <ReactionComponent parentId={post._id} />
+        <Button
+          onClick={handleShowComment}
+          className="bg-transparent text-textGray hover:text-primary hover:bg-transparent flex gap-2.5 items-center"
+        >
           <MessageCircleMore />
           <span className="hidden md:block">Comment</span>
         </Button>
@@ -53,7 +56,10 @@ const PostCard = ({post}: Props) => {
       <div>
         <CommentForm parentId={post._id} />
       </div>
-      <div>Comment View</div>
+      <div>
+        <h3 className="text-xs text-textGray font-bold mb-2">View Comments</h3>
+        {showComments && <CommentCollections parentId={post._id} />}
+      </div>
     </div>
   );
 }

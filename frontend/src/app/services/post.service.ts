@@ -28,6 +28,13 @@ export interface getPostsResponse {
   total: number;
 }
 
+export interface getCommentsResponse {
+  comments: Post[];
+  page: number;
+  totalPages: number;
+  total: number;
+}
+
 export const createPost = (data: createPostPayloadSchema) => {
   return fetcher<createPostresponse>("/content/", {
     method: "POST",
@@ -39,9 +46,38 @@ export const getPost = (page: number, limit = 20) => {
   return fetcher<getPostsResponse>(`/content?page=${page}&limit=${limit}`);
 };
 
-export const createComment = (data: createCommentPayloadSchema, parentId: string) => {
+export const createComment = (
+  data: createCommentPayloadSchema,
+  parentId: string,
+) => {
   return fetcher<createPostresponse>(`/content/comment/${parentId}`, {
     method: "POST",
     body: JSON.stringify(data),
   });
+};
+
+export const getComment = (page: number, limit = 20, parentId: string) => {
+  return fetcher<getCommentsResponse>(
+    `/content/comment/${parentId}?page=${page}&limit=${limit}`,
+  );
+};
+
+export const createReply = (
+  data: createCommentPayloadSchema,
+  parentId: string,
+  commentId: String,
+) => {
+  return fetcher<createPostresponse>(
+    `/content/comment/${parentId}/replies/${commentId}`,
+    {
+      method: "POST",
+      body: JSON.stringify(data),
+    },
+  );
+};
+
+export const getReply = (page: number, limit = 20, parentId: string, commentId: string) => {
+  return fetcher<getCommentsResponse>(
+    `/content/comment/${parentId}/replies/${commentId}?page=${page}&limit=${limit}`,
+  );
 };
