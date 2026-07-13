@@ -16,7 +16,6 @@ export const useGetComments = (parentId: string) => {
     setError("");
     try {
       const res = await getComment(page, undefined, parentId);
-      console.log(res.pagination);
       if (res.pagination) setHasMore(res.pagination.hasMore);
       if (page === 1) {
         setComments(res.comments);
