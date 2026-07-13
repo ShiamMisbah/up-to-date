@@ -6,14 +6,16 @@ import morgan from "morgan";
 import routes from "./routes";
 import { errorHandler } from "./middleware/errorHandler";
 import cookieParser from "cookie-parser";
-// import { notFound } from "./middleware/notFound";
 
 const app = express();
 
 app.use(cookieParser())
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: [
+      "http://localhost:3000",
+      "https://up-to-date-frontend.onrender.com",
+    ],
     credentials: true,
   }),
 );
@@ -25,7 +27,6 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use("/api", routes);
 
-// app.use(notFound);
 app.use(errorHandler);
 
 export default app;
